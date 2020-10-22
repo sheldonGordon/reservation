@@ -1,15 +1,20 @@
 package fr.chatelain.reservation.reservation.views;
 
+import java.time.LocalDate;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -37,15 +42,20 @@ public class InscriptionFormView extends Div {
         add(createFormInscription());
         add(createButtonLayout());
 
-        binder.bind(nom, "nom");
-        binder.bind(prenom, "prenom");
+        binder.forField(nom).asRequired("La saisie d'un nom est obligatoire.").bind("nom");
+        binder.forField(prenom).asRequired("La saisie d'un prenom est obligatoire.").bind("prenom");
         clearForm();
 
         annuler.addClickListener(e -> clearForm());
         enregistrer.addClickListener(e -> {
-            personneService.save(binder.getBean());
-            Notification.show("Personne enregistrée.");
-            clearForm();
+            if (binder.isValid()) {
+                personneService.save(binder.getBean());
+                Notification.show("Personne enregistrée.");
+                clearForm();
+            } else {
+                Notification.show("Erreur de saisie");
+                binder.validate();
+            }
         });
     }
 
@@ -59,7 +69,14 @@ public class InscriptionFormView extends Div {
 
     private Component createFormInscription() {
         FormLayout formLayout = new FormLayout();
-        formLayout.add(nom, prenom);
+        EmailField mail = createEmailField("E-mail");
+        DatePicker anniversaire = createDatePickerField("Anniversaire");
+
+        formLayout.add(nom, prenom, mail, anniversaire);
+        binder.forField(mail).withValidator(new EmailValidator("L'adresse e-mail n'est pas valide")).bind("mail");
+        binder.forField(anniversaire)
+                .withValidator(new AnniversairePredicate(), "Vous devez avoir plus de 18 ans pour vous inscrire!")
+                .bind("anniversaire");
         return formLayout;
     }
 
@@ -70,5 +87,19 @@ public class InscriptionFormView extends Div {
         buttonLayout.add(enregistrer);
         buttonLayout.add(annuler);
         return buttonLayout;
+    }
+
+    private EmailField createEmailField(String field) {
+        EmailField emailField = new EmailField(field);
+        emailField.setClearButtonVisible(true);
+        emailField.setErrorMessage("Entré une adresse e-mail valide.");
+        return emailField;
+    }
+
+    private DatePicker createDatePickerField(String field) {
+        DatePicker datePicker = new DatePicker();
+        LocalDate now = LocalDate.now().minusYears(18);
+        datePicker.setValue(now);
+        return datePicker;
     }
 }

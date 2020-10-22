@@ -1,7 +1,11 @@
 package fr.chatelain.reservation.reservation.entities;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Entity
 public class Personne extends AbstractEntities {
@@ -16,6 +20,16 @@ public class Personne extends AbstractEntities {
     private String nom;
     @Column
     private String prenom;
+    @Column
+    private String mail;
+    @Column
+    private String telephone;
+    @Enumerated(EnumType.STRING)
+    private Sexe sexe;
+    @Column
+    private String adresse;
+    @Column
+    private LocalDate anniversaire;
 
     public String getNom() {
         return nom;
@@ -31,6 +45,46 @@ public class Personne extends AbstractEntities {
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public Sexe getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(Sexe sexe) {
+        this.sexe = sexe;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public LocalDate getAnniversaire() {
+        return anniversaire;
+    }
+
+    public void setAnniversaire(LocalDate anniversaire) {
+        this.anniversaire = anniversaire;
     }
 
 }
