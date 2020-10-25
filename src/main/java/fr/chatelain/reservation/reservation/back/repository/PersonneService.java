@@ -11,7 +11,7 @@ public class PersonneService {
     @Autowired
     private PersonneRepository personneRepository;
 
-    public void save(Personne personne) {
-        personneRepository.save(personne);
+    public Personne save(Personne personne) {
+        return personneRepository.save(personne);
     }
 }
