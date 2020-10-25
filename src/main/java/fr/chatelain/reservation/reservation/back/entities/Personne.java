@@ -1,4 +1,4 @@
-package fr.chatelain.reservation.reservation.entities;
+package fr.chatelain.reservation.reservation.back.entities;
 
 import java.time.LocalDate;
 
@@ -25,7 +25,7 @@ public class Personne extends AbstractEntities {
     @Column
     private String telephone;
     @Enumerated(EnumType.STRING)
-    private Sexe sexe;
+    private Civilite civilite;
     @Column
     private String adresse;
     @Column
@@ -63,14 +63,6 @@ public class Personne extends AbstractEntities {
         this.telephone = telephone;
     }
 
-    public Sexe getSexe() {
-        return sexe;
-    }
-
-    public void setSexe(Sexe sexe) {
-        this.sexe = sexe;
-    }
-
     public String getAdresse() {
         return adresse;
     }
@@ -85,6 +77,14 @@ public class Personne extends AbstractEntities {
 
     public void setAnniversaire(LocalDate anniversaire) {
         this.anniversaire = anniversaire;
+    }
+
+    public Civilite getCivilite() {
+        return civilite;
+    }
+
+    public void setCivilite(Civilite civilite) {
+        this.civilite = civilite;
     }
 
 }

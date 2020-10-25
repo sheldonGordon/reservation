@@ -22,12 +22,9 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
 @JsModule("./styles/shared-styles.js")
 @CssImport("./styles/views/main/main-view.css")
-@PWA(name = "My Project", shortName = "My Project", enableInstallPrompt = false)
+@PWA(name = "Super Gîte", shortName = "SG", enableInstallPrompt = false)
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 public class MainView extends AppLayout {
 
@@ -68,7 +65,7 @@ public class MainView extends AppLayout {
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         logoLayout.add(new Image("images/logo.png", "My Project logo"));
-        logoLayout.add(new H1("My Project"));
+        logoLayout.add(new H1("Super Gîte"));
         layout.add(logoLayout, menu);
         return layout;
     }
@@ -83,7 +80,7 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { createTab("Inscription", InscriptionFormView.class) };
+        return new Tab[] { createTab(InscriptionFormView.ROUTE, InscriptionFormView.class) };
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

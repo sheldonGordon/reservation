@@ -1,4 +1,4 @@
-package fr.chatelain.reservation.reservation.entities;
+package fr.chatelain.reservation.reservation.back.entities;
 
 import java.io.Serializable;
 import java.util.UUID;
