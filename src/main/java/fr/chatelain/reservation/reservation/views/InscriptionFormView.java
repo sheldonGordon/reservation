@@ -27,7 +27,6 @@ import fr.chatelain.reservation.reservation.back.entities.Civilite;
 import fr.chatelain.reservation.reservation.back.entities.Compte;
 import fr.chatelain.reservation.reservation.back.entities.Password;
 import fr.chatelain.reservation.reservation.back.entities.Personne;
-import fr.chatelain.reservation.reservation.back.repository.CompteRepository;
 import fr.chatelain.reservation.reservation.back.repository.CompteService;
 import fr.chatelain.reservation.reservation.back.repository.PasswordService;
 import fr.chatelain.reservation.reservation.back.repository.PersonneService;

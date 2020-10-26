@@ -2,7 +2,6 @@ package fr.chatelain.reservation.reservation.back.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 
 @Entity
 public class Password extends AbstractEntities {
