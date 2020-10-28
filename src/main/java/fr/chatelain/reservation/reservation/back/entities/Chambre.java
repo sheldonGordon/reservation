@@ -28,10 +28,10 @@ public class Chambre extends AbstractEntities {
     private List<Photos> photos;
 
     @ManyToMany
-    private List<Option> options;
+    private List<Service> services;
 
     @ManyToMany
-    private List<Service> services;
+    private List<DateDebutFin> indisponibilites;
 
     public Chambre() {
         super();
@@ -77,20 +77,20 @@ public class Chambre extends AbstractEntities {
         this.photos = photos;
     }
 
-    public List<Option> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<Option> options) {
-        this.options = options;
-    }
-
     public List<Service> getServices() {
         return services;
     }
 
     public void setServices(List<Service> services) {
         this.services = services;
+    }
+
+    public List<DateDebutFin> getIndisponibilites() {
+        return indisponibilites;
+    }
+
+    public void setIndisponibilites(List<DateDebutFin> indisponibilites) {
+        this.indisponibilites = indisponibilites;
     }
 
 }
