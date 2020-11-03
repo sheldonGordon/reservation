@@ -22,6 +22,7 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
+import fr.chatelain.reservation.reservation.views.administration.chambre.AjouterChambreFormView;
 import fr.chatelain.reservation.reservation.views.inscription.InscriptionFormView;
 
 @JsModule("./styles/shared-styles.js")
@@ -82,7 +83,8 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { createTab(InscriptionFormView.ROUTE, InscriptionFormView.class) };
+        return new Tab[] { createTab(InscriptionFormView.ROUTE, InscriptionFormView.class),
+                createTab(AjouterChambreFormView.ROUTE, AjouterChambreFormView.class) };
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
