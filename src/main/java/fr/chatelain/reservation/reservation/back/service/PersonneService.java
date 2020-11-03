@@ -1,9 +1,10 @@
-package fr.chatelain.reservation.reservation.back.repository;
+package fr.chatelain.reservation.reservation.back.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.chatelain.reservation.reservation.back.entities.Personne;
+import fr.chatelain.reservation.reservation.back.repository.PersonneRepository;
 
 @Service
 public class PersonneService {

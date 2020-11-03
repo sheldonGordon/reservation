@@ -22,6 +22,8 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
+import fr.chatelain.reservation.reservation.views.inscription.InscriptionFormView;
+
 @JsModule("./styles/shared-styles.js")
 @CssImport("./styles/views/main/main-view.css")
 @PWA(name = "Super Gîte", shortName = "SG", enableInstallPrompt = false)

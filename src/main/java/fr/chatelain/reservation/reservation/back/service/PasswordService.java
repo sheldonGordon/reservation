@@ -1,4 +1,4 @@
-package fr.chatelain.reservation.reservation.back.repository;
+package fr.chatelain.reservation.reservation.back.service;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.chatelain.reservation.reservation.back.entities.Password;
+import fr.chatelain.reservation.reservation.back.repository.PasswordRepository;
 
 @Service
 public class PasswordService {

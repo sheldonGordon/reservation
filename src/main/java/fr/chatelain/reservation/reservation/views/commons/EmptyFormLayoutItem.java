@@ -1,4 +1,4 @@
-package fr.chatelain.reservation.reservation.views;
+package fr.chatelain.reservation.reservation.views.commons;
 
 import com.vaadin.flow.component.Html;
 

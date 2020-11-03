@@ -1,4 +1,4 @@
-package fr.chatelain.reservation.reservation.views;
+package fr.chatelain.reservation.reservation.views.inscription;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -27,10 +27,12 @@ import fr.chatelain.reservation.reservation.back.entities.Civilite;
 import fr.chatelain.reservation.reservation.back.entities.Compte;
 import fr.chatelain.reservation.reservation.back.entities.Password;
 import fr.chatelain.reservation.reservation.back.entities.Personne;
-import fr.chatelain.reservation.reservation.back.repository.CompteService;
-import fr.chatelain.reservation.reservation.back.repository.PasswordService;
-import fr.chatelain.reservation.reservation.back.repository.PersonneService;
-import fr.chatelain.reservation.reservation.back.repository.RoleService;
+import fr.chatelain.reservation.reservation.back.service.CompteService;
+import fr.chatelain.reservation.reservation.back.service.PasswordService;
+import fr.chatelain.reservation.reservation.back.service.PersonneService;
+import fr.chatelain.reservation.reservation.back.service.RoleService;
+import fr.chatelain.reservation.reservation.views.MainView;
+import fr.chatelain.reservation.reservation.views.commons.EmptyFormLayoutItem;
 import fr.chatelain.reservation.reservation.views.validator.AnniversaireValidator;
 import fr.chatelain.reservation.reservation.views.validator.PhoneValidator;
 
