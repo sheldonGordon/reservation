@@ -2,6 +2,7 @@ package fr.chatelain.reservation.reservation.back.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 public class CodePromo extends AbstractEntities {
@@ -13,6 +14,9 @@ public class CodePromo extends AbstractEntities {
 
     @Column
     private double pourcentage;
+
+    @OneToOne
+    private DateDebutFin validite;
 
     public CodePromo() {
         super();
@@ -32,6 +36,14 @@ public class CodePromo extends AbstractEntities {
 
     public void setPourcentage(double pourcentage) {
         this.pourcentage = pourcentage;
+    }
+
+    public DateDebutFin getValidite() {
+        return validite;
+    }
+
+    public void setValidite(DateDebutFin validite) {
+        this.validite = validite;
     }
 
 }
