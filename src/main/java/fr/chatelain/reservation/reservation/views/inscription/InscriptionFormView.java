@@ -40,7 +40,7 @@ import fr.chatelain.reservation.reservation.views.validator.PhoneValidator;
 @PageTitle("Formulaire d'inscription")
 public class InscriptionFormView extends Div {
 
-    public static final String ROUTE = "inscription";
+    public static final String ROUTE = "Inscription";
 
     private static final long serialVersionUID = 2745061859487361712L;
 

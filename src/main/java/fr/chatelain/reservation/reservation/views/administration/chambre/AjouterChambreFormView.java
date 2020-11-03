@@ -23,7 +23,7 @@ public class AjouterChambreFormView extends Div {
 
     private static final long serialVersionUID = -301749182574686786L;
 
-    public static final String ROUTE = "ajouterChambre";
+    public static final String ROUTE = "Ajouter une chambre";
 
     private Binder<Chambre> binder = new Binder<>(Chambre.class);
 
