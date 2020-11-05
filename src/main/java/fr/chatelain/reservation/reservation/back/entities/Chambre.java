@@ -1,5 +1,6 @@
 package fr.chatelain.reservation.reservation.back.entities;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,13 +17,13 @@ public class Chambre extends AbstractEntities {
     private String nom;
 
     @Column
-    private int nombrePersonne;
+    private Double nombrePersonne;
 
     @Column
-    private double prix;
+    private BigDecimal prix;
 
     @Column
-    private int superficie;
+    private Double superficie;
 
     @OneToMany
     private List<Photos> photos;
@@ -45,27 +46,27 @@ public class Chambre extends AbstractEntities {
         this.nom = nom;
     }
 
-    public int getNombrePersonne() {
+    public Double getNombrePersonne() {
         return nombrePersonne;
     }
 
-    public void setNombrePersonne(int nombrePersonne) {
+    public void setNombrePersonne(Double nombrePersonne) {
         this.nombrePersonne = nombrePersonne;
     }
 
-    public double getPrix() {
+    public BigDecimal getPrix() {
         return prix;
     }
 
-    public void setPrix(double prix) {
+    public void setPrix(BigDecimal prix) {
         this.prix = prix;
     }
 
-    public int getSuperficie() {
+    public Double getSuperficie() {
         return superficie;
     }
 
-    public void setSuperficie(int superficie) {
+    public void setSuperficie(Double superficie) {
         this.superficie = superficie;
     }
 
