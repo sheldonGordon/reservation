@@ -6,28 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.DomEvent;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.upload.Receiver;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.shared.Registration;
 
 import org.apache.commons.codec.binary.Base64;
 
+import elemental.json.JsonObject;
 import fr.chatelain.reservation.reservation.back.entities.Chambre;
 import fr.chatelain.reservation.reservation.back.entities.Photos;
+import fr.chatelain.reservation.reservation.back.entities.Service;
 import fr.chatelain.reservation.reservation.back.service.ChambreService;
 import fr.chatelain.reservation.reservation.back.service.PhotosService;
 import fr.chatelain.reservation.reservation.views.MainView;
@@ -46,17 +48,20 @@ public class AjouterChambreFormView extends Div {
 
     private NumberField nombrePlace = new NumberField("Nombre de place");
 
-    private BigDecimalField prix = new BigDecimalField("Prix de la chambre");
+    private BigDecimalField prix = new BigDecimalField("Prix de la nuitée");
 
     private NumberField superficie = new NumberField("Superficie de la chambre");
 
-    private List<Photos> listePhotos = new ArrayList<Photos>();
+    private List<Photos> listPhotos = new ArrayList<Photos>();
+
+    private List<Service> listServiceSelected = new ArrayList<Service>();
 
     public AjouterChambreFormView(ChambreService chambreService, PhotosService photosService) {
         setId("chambre-form-ajout");
 
         add(createUploadFile());
         add(createFormInscription());
+        add(createListService());
     }
 
     private Component createFormInscription() {
@@ -80,9 +85,16 @@ public class AjouterChambreFormView extends Div {
 
     private Component createUploadFile() {
         MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
-        MyUpload upload = new MyUpload(buffer);
+
+        Button buttonUpload = new Button("Ajouter des photos");
+        buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Span dropLabel = new Span("Déposer vos images ici.");
+
+        Upload upload = new Upload(buffer);
+        upload.setUploadButton(buttonUpload);
+        upload.setDropLabel(dropLabel);
         upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
-        // Upload upload = new Upload(buffer);
 
         upload.addSucceededListener(event -> {
             Photos photos = new Photos();
@@ -94,38 +106,61 @@ public class AjouterChambreFormView extends Div {
                 is.close();
 
                 photos.setData(Base64.encodeBase64String(imageBytes));
-                listePhotos.add(photos);
+                listPhotos.add(photos);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        upload.addFileRemoveListener(event -> {
-            System.err.println("----------------- Suppr" + event.getClass());
-        });
+        upload.getElement().addEventListener("file-remove", event -> {
+            JsonObject eventData = event.getEventData();
+            String namePhotosDeleted = eventData.getString("event.detail.file.name");
+            List<Photos> listTmp = new ArrayList<Photos>(listPhotos);
+            listTmp.forEach(photos -> {
+                if (photos.getNom().equals(namePhotosDeleted)) {
+                    listPhotos.remove(photos);
+                }
+            });
+        }).addEventData("event.detail.file.name");
 
         return upload;
     }
 
-    public class MyUpload extends Upload {
-        public MyUpload(Receiver receiver) {
-            super(receiver);
-        }
+    public Component createListService() {
+        // TODO Créer un initSingleton pour les données de reférence
+        Service s1 = new Service("Service 1");
+        Service s2 = new Service("Service 2");
+        Service s3 = new Service("Service 3");
+        Service s4 = new Service("Service 4");
+        Service s5 = new Service("Service 5");
+        Service s6 = new Service("Service 6");
 
-        public MyUpload() {
-        }
+        List<Service> fakeServices = new ArrayList<Service>();
+        fakeServices.add(s1);
+        fakeServices.add(s2);
+        fakeServices.add(s3);
+        fakeServices.add(s4);
+        fakeServices.add(s5);
+        fakeServices.add(s6);
+        MultiSelectListBox<Service> listBoxService = new MultiSelectListBox<Service>();
+        listBoxService.setItems(fakeServices);
+        listBoxService.setRenderer(new ComponentRenderer<>((service) -> {
+            Div text = new Div();
+            text.setText(service.getLibelle());
 
-        Registration addFileRemoveListener(ComponentEventListener<FileRemoveEvent> listener) {
-            return super.addListener(FileRemoveEvent.class, listener);
-        }
+            return text;
+        }));
 
+        listBoxService.addSelectionListener(event -> {
+            event.getAddedSelection().forEach(s -> {
+                listServiceSelected.add(s);
+            });
+
+            event.getRemovedSelection().forEach(s -> {
+                listServiceSelected.remove(s);
+            });
+        });
+        return listBoxService;
     }
 
-    @DomEvent("file-remove")
-    public static class FileRemoveEvent extends ComponentEvent<Upload> {
-        public FileRemoveEvent(Upload source, boolean fromClient) {
-            super(source, fromClient);
-        }
-
-    }
 }

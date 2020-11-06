@@ -11,8 +11,9 @@ public class Service extends AbstractEntities {
     @Column
     private String libelle;
 
-    public Service() {
+    public Service(String libelle) {
         super();
+        this.libelle = libelle;
     }
 
     public String getLibelle() {
