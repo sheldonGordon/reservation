@@ -11,6 +11,10 @@ public class Service extends AbstractEntities {
     @Column
     private String libelle;
 
+    public Service() {
+        super();
+    }
+
     public Service(String libelle) {
         super();
         this.libelle = libelle;

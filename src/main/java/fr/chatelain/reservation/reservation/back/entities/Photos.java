@@ -8,7 +8,7 @@ public class Photos extends AbstractEntities {
 
     private static final long serialVersionUID = 7714218428585395888L;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String data;
 
     @Column

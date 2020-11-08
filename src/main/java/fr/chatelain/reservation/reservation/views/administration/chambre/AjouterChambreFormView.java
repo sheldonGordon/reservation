@@ -14,6 +14,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.listbox.MultiSelectListBox;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -32,6 +34,7 @@ import fr.chatelain.reservation.reservation.back.entities.Photos;
 import fr.chatelain.reservation.reservation.back.entities.Service;
 import fr.chatelain.reservation.reservation.back.service.ChambreService;
 import fr.chatelain.reservation.reservation.back.service.PhotosService;
+import fr.chatelain.reservation.reservation.back.service.ServiceService;
 import fr.chatelain.reservation.reservation.views.MainView;
 
 @Route(value = AjouterChambreFormView.ROUTE, layout = MainView.class)
@@ -52,16 +55,49 @@ public class AjouterChambreFormView extends Div {
 
     private NumberField superficie = new NumberField("Superficie de la chambre");
 
+    private Button annuler = new Button("Annuler");
+
+    private Button enregistrer = new Button("Enregistrer");
+
     private List<Photos> listPhotos = new ArrayList<Photos>();
 
     private List<Service> listServiceSelected = new ArrayList<Service>();
 
-    public AjouterChambreFormView(ChambreService chambreService, PhotosService photosService) {
+    private List<Service> listAllService = new ArrayList<Service>();
+
+    public AjouterChambreFormView(ChambreService chambreService, PhotosService photosService,
+            ServiceService serviceService) {
         setId("chambre-form-ajout");
+
+        listAllService = serviceService.findAll();
 
         add(createUploadFile());
         add(createFormInscription());
         add(createListService());
+        add(createButtonLayout());
+
+        clearForm();
+
+        annuler.addClickListener(e -> clearForm());
+        enregistrer.addClickListener(e -> {
+            if (binder.isValid()) {
+                listPhotos.forEach(p -> {
+                    photosService.save(p);
+                });
+                binder.getBean().setPhotos(listPhotos);
+                binder.getBean().setServices(listServiceSelected);
+                chambreService.save(binder.getBean());
+                Notification.show("Chambre ajoutée.");
+                clearForm();
+            } else {
+                Notification.show("Erreur de saisie");
+                binder.validate();
+            }
+        });
+    }
+
+    private void clearForm() {
+        binder.setBean(new Chambre());
     }
 
     private Component createFormInscription() {
@@ -127,23 +163,8 @@ public class AjouterChambreFormView extends Div {
     }
 
     public Component createListService() {
-        // TODO Créer un initSingleton pour les données de reférence
-        Service s1 = new Service("Service 1");
-        Service s2 = new Service("Service 2");
-        Service s3 = new Service("Service 3");
-        Service s4 = new Service("Service 4");
-        Service s5 = new Service("Service 5");
-        Service s6 = new Service("Service 6");
-
-        List<Service> fakeServices = new ArrayList<Service>();
-        fakeServices.add(s1);
-        fakeServices.add(s2);
-        fakeServices.add(s3);
-        fakeServices.add(s4);
-        fakeServices.add(s5);
-        fakeServices.add(s6);
         MultiSelectListBox<Service> listBoxService = new MultiSelectListBox<Service>();
-        listBoxService.setItems(fakeServices);
+        listBoxService.setItems(listAllService);
         listBoxService.setRenderer(new ComponentRenderer<>((service) -> {
             Div text = new Div();
             text.setText(service.getLibelle());
@@ -161,6 +182,15 @@ public class AjouterChambreFormView extends Div {
             });
         });
         return listBoxService;
+    }
+
+    private Component createButtonLayout() {
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.addClassName("button-layout");
+        enregistrer.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        buttonLayout.add(enregistrer);
+        buttonLayout.add(annuler);
+        return buttonLayout;
     }
 
 }
