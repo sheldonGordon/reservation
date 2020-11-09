@@ -10,12 +10,16 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -28,6 +32,7 @@ import com.vaadin.flow.router.Route;
 
 import org.apache.commons.codec.binary.Base64;
 
+import elemental.json.Json;
 import elemental.json.JsonObject;
 import fr.chatelain.reservation.reservation.back.entities.Chambre;
 import fr.chatelain.reservation.reservation.back.entities.Photos;
@@ -61,7 +66,15 @@ public class AjouterChambreFormView extends Div {
 
     private List<Photos> listPhotos = new ArrayList<Photos>();
 
+    private MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
+
+    private Upload upload = new Upload(buffer);
+
+    private Button buttonUpload = new Button("Ajouter des photos");
+
     private List<Service> listServiceSelected = new ArrayList<Service>();
+
+    private MultiSelectListBox<Service> listBoxService = new MultiSelectListBox<Service>();
 
     private List<Service> listAllService = new ArrayList<Service>();
 
@@ -98,6 +111,11 @@ public class AjouterChambreFormView extends Div {
 
     private void clearForm() {
         binder.setBean(new Chambre());
+        listBoxService.deselectAll();
+        listServiceSelected = new ArrayList<Service>(0);
+        buffer = new MultiFileMemoryBuffer();
+        upload.getElement().setPropertyJson("files", Json.createArray());
+        listPhotos = new ArrayList<Photos>(0);
     }
 
     private Component createFormInscription() {
@@ -120,14 +138,10 @@ public class AjouterChambreFormView extends Div {
     }
 
     private Component createUploadFile() {
-        MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
-
-        Button buttonUpload = new Button("Ajouter des photos");
         buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         Span dropLabel = new Span("Déposer vos images ici.");
 
-        Upload upload = new Upload(buffer);
         upload.setUploadButton(buttonUpload);
         upload.setDropLabel(dropLabel);
         upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
@@ -163,7 +177,9 @@ public class AjouterChambreFormView extends Div {
     }
 
     public Component createListService() {
-        MultiSelectListBox<Service> listBoxService = new MultiSelectListBox<Service>();
+        VerticalLayout layout = new VerticalLayout();
+        layout.setWidthFull();
+        H4 titre = new H4("Ajouter des services à la chambre :");
         listBoxService.setItems(listAllService);
         listBoxService.setRenderer(new ComponentRenderer<>((service) -> {
             Div text = new Div();
@@ -171,6 +187,7 @@ public class AjouterChambreFormView extends Div {
 
             return text;
         }));
+        listBoxService.setWidthFull();
 
         listBoxService.addSelectionListener(event -> {
             event.getAddedSelection().forEach(s -> {
@@ -181,7 +198,10 @@ public class AjouterChambreFormView extends Div {
                 listServiceSelected.remove(s);
             });
         });
-        return listBoxService;
+        layout.add(titre);
+        layout.add(listBoxService);
+
+        return layout;
     }
 
     private Component createButtonLayout() {
