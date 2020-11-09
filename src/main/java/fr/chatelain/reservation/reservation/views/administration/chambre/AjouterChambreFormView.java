@@ -8,10 +8,9 @@ import java.util.List;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -43,6 +42,7 @@ import fr.chatelain.reservation.reservation.back.service.ServiceService;
 import fr.chatelain.reservation.reservation.views.MainView;
 
 @Route(value = AjouterChambreFormView.ROUTE, layout = MainView.class)
+@CssImport("./styles/views/administration/ajouter-chambre-form-view.css")
 @PageTitle("Formulaire d'ajout d'une chambre")
 public class AjouterChambreFormView extends Div {
 
