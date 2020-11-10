@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -25,7 +26,7 @@ public class Chambre extends AbstractEntities {
     @Column
     private Double superficie;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Photos> photos;
 
     @ManyToMany
