@@ -1,23 +1,22 @@
 package fr.chatelain.reservation.reservation.views.administration.chambre;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
+import com.flowingcode.vaadin.addons.carousel.Carousel;
+import com.flowingcode.vaadin.addons.carousel.Slide;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
 
-import de.mekaso.vaadin.addons.Carousel;
 import fr.chatelain.reservation.reservation.back.entities.Chambre;
 import fr.chatelain.reservation.reservation.back.entities.Photos;
 import fr.chatelain.reservation.reservation.back.service.ChambreService;
@@ -79,8 +78,9 @@ public class ListerChambreView extends Div {
     }
 
     private Component showInformationsChambre(Chambre chambre) {
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.setId("details-chambre");
+        VerticalLayout verticalLayout = new VerticalLayout();
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.setId("details-chambre");
 
         Div divLeft = new Div();
         divLeft.setId("div-left");
@@ -102,22 +102,28 @@ public class ListerChambreView extends Div {
         divRight.add(superficie);
         divRight.add(prix);
 
-        layout.add(showImagesChambre(chambre.getPhotos()));
-        layout.add(divLeft);
-        layout.add(divRight);
-        return layout;
+        verticalLayout.add(showImagesChambre(chambre.getPhotos()));
+        horizontalLayout.add(divLeft);
+        horizontalLayout.add(divRight);
+
+        verticalLayout.add(horizontalLayout);
+        return verticalLayout;
     }
 
     private Component showImagesChambre(List<Photos> listePhotos) {
-        Carousel carousel = Carousel.create();
-        carousel.setMaxHeight("500px");
+        Slide[] slides = new Slide[listePhotos.size()];
 
         listePhotos.forEach(p -> {
-            String resource = "data:image/png;base64," + p.getData();
+            String resource = "data:" + p.getTypeMime() + ";base64, " + p.getData();
             Image image = new Image(resource, "dummy image");
-            carousel.add(image);
+            image.setMaxHeight("550px");
+            slides[listePhotos.indexOf(p)] = new Slide(image);
         });
 
+        Carousel carousel = new Carousel();
+        carousel.setSlides(slides);
+        carousel.setWidth("100%");
+        carousel.setHeight("600px");
         return carousel;
     }
 }

@@ -24,7 +24,6 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.FileData;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -68,9 +67,9 @@ public class AjouterChambreFormView extends Div {
 
     private List<Photos> listPhotos = new ArrayList<Photos>();
 
-    private MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
+    private MultiFileMemoryBuffer buffer;
 
-    private Upload upload = new Upload(buffer);
+    private Upload upload;
 
     private Button buttonUpload = new Button("Ajouter des photos");
 
@@ -115,7 +114,7 @@ public class AjouterChambreFormView extends Div {
         binder.setBean(new Chambre());
         listBoxService.deselectAll();
         listServiceSelected = new ArrayList<Service>(0);
-        buffer = new MultiFileMemoryBuffer();
+        // buffer = new MultiFileMemoryBuffer();
         upload.getElement().setPropertyJson("files", Json.createArray());
         listPhotos = new ArrayList<Photos>(0);
     }
@@ -140,6 +139,10 @@ public class AjouterChambreFormView extends Div {
     }
 
     private Component createUploadFile() {
+        buffer = new MultiFileMemoryBuffer();
+
+        upload = new Upload(buffer);
+
         buttonUpload.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         Span dropLabel = new Span("Déposer vos images ici.");
@@ -151,24 +154,15 @@ public class AjouterChambreFormView extends Div {
         upload.addSucceededListener(event -> {
             Photos photos = new Photos();
             photos.setNom(event.getFileName());
+            photos.setTypeMime(event.getMIMEType());
 
-            InputStream is = buffer.getInputStream(event.getFileName());
             try {
-                byte[] imageBytes = new byte[(int) event.getContentLength()];
-                is.read(imageBytes);
-
-                System.err.println(imageBytes.toString());
-                System.err.println("------------ " + Base64.getEncoder().encodeToString(imageBytes));
+                InputStream is = buffer.getInputStream(event.getFileName());
+                byte[] imageBytes = IOUtils.toByteArray(is);
                 photos.setData(Base64.getEncoder().encodeToString(imageBytes));
                 listPhotos.add(photos);
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
 

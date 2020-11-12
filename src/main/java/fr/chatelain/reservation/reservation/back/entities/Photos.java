@@ -14,6 +14,9 @@ public class Photos extends AbstractEntities {
     @Column
     private String nom;
 
+    @Column
+    private String typeMime;
+
     public Photos() {
         super();
     }
@@ -32,6 +35,14 @@ public class Photos extends AbstractEntities {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getTypeMime() {
+        return typeMime;
+    }
+
+    public void setTypeMime(String typeMime) {
+        this.typeMime = typeMime;
     }
 
 }
