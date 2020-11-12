@@ -3,6 +3,7 @@ package fr.chatelain.reservation.reservation.views.administration.chambre;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import com.vaadin.flow.component.Component;
@@ -23,13 +24,14 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.FileData;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
@@ -149,16 +151,24 @@ public class AjouterChambreFormView extends Div {
         upload.addSucceededListener(event -> {
             Photos photos = new Photos();
             photos.setNom(event.getFileName());
-            InputStream is = buffer.getInputStream(event.getFileName());
-            byte[] imageBytes = new byte[(int) event.getContentLength()];
-            try {
-                is.read(imageBytes, 0, imageBytes.length);
-                is.close();
 
-                photos.setData(Base64.encodeBase64String(imageBytes));
+            InputStream is = buffer.getInputStream(event.getFileName());
+            try {
+                byte[] imageBytes = new byte[(int) event.getContentLength()];
+                is.read(imageBytes);
+
+                System.err.println(imageBytes.toString());
+                System.err.println("------------ " + Base64.getEncoder().encodeToString(imageBytes));
+                photos.setData(Base64.getEncoder().encodeToString(imageBytes));
                 listPhotos.add(photos);
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
