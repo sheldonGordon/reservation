@@ -20,6 +20,8 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -40,7 +42,9 @@ import fr.chatelain.reservation.reservation.views.validator.PhoneValidator;
 @PageTitle("Formulaire d'inscription")
 public class InscriptionFormView extends Div {
 
-    public static final String ROUTE = "Inscription";
+    public static final String ROUTE = "inscription";
+
+    public static final String NOM_TAB = "Inscription";
 
     private static final long serialVersionUID = 2745061859487361712L;
 

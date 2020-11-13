@@ -33,7 +33,9 @@ vaadin-tab {
   font-weight: 600;
   color: var(--lumo-body-text-color);
 }
-
+a[router-link] {
+  white-space: pre;
+}
 vaadin-tab:hover {
   background-color: var(--lumo-contrast-5pct);
 }

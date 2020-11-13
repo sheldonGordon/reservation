@@ -17,6 +17,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Router;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
@@ -84,14 +85,17 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { createTab(InscriptionFormView.ROUTE, InscriptionFormView.class),
-                createTab(AjouterChambreFormView.ROUTE, AjouterChambreFormView.class),
-                createTab(ListerChambreView.ROUTE, ListerChambreView.class) };
+        return new Tab[] { createTab(InscriptionFormView.ROUTE, InscriptionFormView.NOM_TAB, InscriptionFormView.class),
+                createTab(AjouterChambreFormView.ROUTE, AjouterChambreFormView.NOM_TAB, AjouterChambreFormView.class),
+                createTab(ListerChambreView.ROUTE, ListerChambreView.NOM_TAB, ListerChambreView.class) };
     }
 
-    private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
+    private static Tab createTab(String route, String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
-        tab.add(new RouterLink(text, navigationTarget));
+        RouterLink routerLink = new RouterLink(text, navigationTarget);
+        routerLink.setText(text);
+        tab.add(routerLink);
+
         ComponentUtil.setData(tab, Class.class, navigationTarget);
         return tab;
     }

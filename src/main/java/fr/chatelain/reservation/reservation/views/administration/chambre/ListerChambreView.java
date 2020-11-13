@@ -14,6 +14,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -29,7 +31,9 @@ public class ListerChambreView extends Div {
 
     private static final long serialVersionUID = 7152701805741723212L;
 
-    public static final String ROUTE = "Liste des chambres";
+    public static final String ROUTE = "liste_des_chambres";
+
+    public static final String NOM_TAB = "Liste des chambre";
 
     private List<Chambre> listeChambres = new ArrayList<Chambre>(0);
 

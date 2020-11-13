@@ -27,6 +27,8 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -49,7 +51,9 @@ public class AjouterChambreFormView extends Div {
 
     private static final long serialVersionUID = -301749182574686786L;
 
-    public static final String ROUTE = "Ajouter une chambre";
+    public static final String ROUTE = "ajouter_une_chambre";
+
+    public static final String NOM_TAB = "Ajouter une chambre";
 
     private Binder<Chambre> binder = new Binder<>(Chambre.class);
 
@@ -150,6 +154,14 @@ public class AjouterChambreFormView extends Div {
         upload.setUploadButton(buttonUpload);
         upload.setDropLabel(dropLabel);
         upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
+
+        upload.addStartedListener(event -> {
+            String fileName = event.getFileName();
+            if (buffer.getFiles().contains(fileName)) {
+                Notification.show("Fichier déjà présent.");
+                event.getUpload().interruptUpload();
+            }
+        });
 
         upload.addSucceededListener(event -> {
             Photos photos = new Photos();
