@@ -14,8 +14,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -88,7 +86,10 @@ public class ListerChambreView extends Div {
 
         Div divLeft = new Div();
         divLeft.setId("div-left");
+        Div divCenter = new Div();
+        divCenter.setId("div-center");
         Div divRight = new Div();
+        divRight.setId("div-right");
 
         Paragraph labelNombrePlace = new Paragraph("Nombre de places : ");
         Paragraph labelSuperficie = new Paragraph("Superficie : ");
@@ -102,12 +103,17 @@ public class ListerChambreView extends Div {
         Paragraph superficie = new Paragraph(chambre.getSuperficie() + " m²");
         Paragraph prix = new Paragraph(chambre.getPrix() + " €");
 
-        divRight.add(nombrePlace);
-        divRight.add(superficie);
-        divRight.add(prix);
+        divCenter.add(nombrePlace);
+        divCenter.add(superficie);
+        divCenter.add(prix);
+
+        chambre.getServices().forEach(s -> {
+            divRight.add(new Paragraph(s.getLibelle()));
+        });
 
         verticalLayout.add(showImagesChambre(chambre.getPhotos()));
         horizontalLayout.add(divLeft);
+        horizontalLayout.add(divCenter);
         horizontalLayout.add(divRight);
 
         verticalLayout.add(horizontalLayout);
@@ -119,15 +125,15 @@ public class ListerChambreView extends Div {
 
         listePhotos.forEach(p -> {
             String resource = "data:" + p.getTypeMime() + ";base64, " + p.getData();
-            Image image = new Image(resource, "dummy image");
-            image.setMaxHeight("550px");
+            Image image = new Image(resource, "Image non trouvée.");
+            image.setMaxHeight("350px");
             slides[listePhotos.indexOf(p)] = new Slide(image);
         });
 
         Carousel carousel = new Carousel();
         carousel.setSlides(slides);
         carousel.setWidth("100%");
-        carousel.setHeight("600px");
+        carousel.setHeight("400px");
         return carousel;
     }
 }

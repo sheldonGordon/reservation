@@ -1,9 +1,19 @@
 #details-chambre {
   margin: 20px;
+  width: 100%;
 }
 
 #div-left {
   text-align: right;
+  width: 33%;
+}
+
+#div-center {
+  width: 33%;
+}
+
+#div-right {
+  width: 33%;
 }
 
 paper-slide {

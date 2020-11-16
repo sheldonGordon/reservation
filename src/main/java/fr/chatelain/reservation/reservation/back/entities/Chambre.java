@@ -3,9 +3,12 @@ package fr.chatelain.reservation.reservation.back.entities;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -29,10 +32,16 @@ public class Chambre extends AbstractEntities {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Photos> photos;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "chambre_services", joinColumns = {
+            @JoinColumn(name = "chambre_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
+                    @JoinColumn(name = "services_id", referencedColumnName = "id", nullable = false, updatable = false) })
     private List<Service> services;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "chambre_indisponibilites", joinColumns = {
+            @JoinColumn(name = "chambre_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
+                    @JoinColumn(name = "indisponibilites", referencedColumnName = "id", nullable = false, updatable = false) })
     private List<DateDebutFin> indisponibilites;
 
     public Chambre() {
