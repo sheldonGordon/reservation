@@ -1,6 +1,6 @@
 package fr.chatelain.reservation.reservation.back.entities;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ public class Reservation extends AbstractEntities {
     private Chambre chambre;
 
     @ManyToMany
-    private List<Option> options;
+    private Set<Option> options;
 
     @ManyToOne
     private Compte client;
@@ -36,11 +36,11 @@ public class Reservation extends AbstractEntities {
         this.setAnnulation(false);
     }
 
-    public List<Option> getOptions() {
+    public Set<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(List<Option> options) {
+    public void setOptions(Set<Option> options) {
         this.options = options;
     }
 

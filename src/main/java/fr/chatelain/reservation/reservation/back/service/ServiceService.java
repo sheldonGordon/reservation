@@ -1,8 +1,9 @@
 package fr.chatelain.reservation.reservation.back.service;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.chatelain.reservation.reservation.back.entities.Service;
@@ -18,8 +19,8 @@ public class ServiceService {
         return serviceRepository.save(service);
     }
 
-    public List<Service> findAll() {
+    public Set<Service> findAll() {
         Iterable<Service> it = serviceRepository.findAll();
-        return IteratorUtils.toList(it.iterator());
+        return new HashSet<Service>((Collection) it);
     }
 }

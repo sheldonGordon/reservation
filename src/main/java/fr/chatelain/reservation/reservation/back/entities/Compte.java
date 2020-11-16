@@ -1,6 +1,6 @@
 package fr.chatelain.reservation.reservation.back.entities;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -20,7 +20,7 @@ public class Compte extends AbstractEntities {
     private Password password;
 
     @ManyToMany
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public Compte() {
         super();
@@ -34,11 +34,11 @@ public class Compte extends AbstractEntities {
         this.personne = personne;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

@@ -2,6 +2,7 @@ package fr.chatelain.reservation.reservation.views.administration.chambre;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.flowingcode.vaadin.addons.carousel.Carousel;
 import com.flowingcode.vaadin.addons.carousel.Slide;
@@ -120,14 +121,14 @@ public class ListerChambreView extends Div {
         return verticalLayout;
     }
 
-    private Component showImagesChambre(List<Photos> listePhotos) {
+    private Component showImagesChambre(Set<Photos> listePhotos) {
         Slide[] slides = new Slide[listePhotos.size()];
 
         listePhotos.forEach(p -> {
             String resource = "data:" + p.getTypeMime() + ";base64, " + p.getData();
             Image image = new Image(resource, "Image non trouvée.");
             image.setMaxHeight("350px");
-            slides[listePhotos.indexOf(p)] = new Slide(image);
+            slides[new ArrayList<>(listePhotos).indexOf(p)] = new Slide(image);
         });
 
         Carousel carousel = new Carousel();

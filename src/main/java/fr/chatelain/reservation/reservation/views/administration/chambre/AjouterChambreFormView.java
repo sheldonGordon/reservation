@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -27,8 +29,6 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -69,7 +69,7 @@ public class AjouterChambreFormView extends Div {
 
     private Button enregistrer = new Button("Enregistrer");
 
-    private List<Photos> listPhotos = new ArrayList<Photos>();
+    private Set<Photos> listPhotos = new HashSet<Photos>();
 
     private MultiFileMemoryBuffer buffer;
 
@@ -77,11 +77,11 @@ public class AjouterChambreFormView extends Div {
 
     private Button buttonUpload = new Button("Ajouter des photos");
 
-    private List<Service> listServiceSelected = new ArrayList<Service>();
+    private Set<Service> listServiceSelected = new HashSet<Service>();
 
     private MultiSelectListBox<Service> listBoxService = new MultiSelectListBox<Service>();
 
-    private List<Service> listAllService = new ArrayList<Service>();
+    private Set<Service> listAllService = new HashSet<Service>();
 
     public AjouterChambreFormView(ChambreService chambreService, PhotosService photosService,
             ServiceService serviceService) {
@@ -117,10 +117,10 @@ public class AjouterChambreFormView extends Div {
     private void clearForm() {
         binder.setBean(new Chambre());
         listBoxService.deselectAll();
-        listServiceSelected = new ArrayList<Service>(0);
+        listServiceSelected = new HashSet<Service>(0);
         // buffer = new MultiFileMemoryBuffer();
         upload.getElement().setPropertyJson("files", Json.createArray());
-        listPhotos = new ArrayList<Photos>(0);
+        listPhotos = new HashSet<Photos>(0);
     }
 
     private Component createFormInscription() {
