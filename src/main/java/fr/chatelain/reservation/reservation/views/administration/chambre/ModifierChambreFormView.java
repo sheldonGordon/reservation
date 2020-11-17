@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.vaadin.flow.component.Component;
@@ -30,12 +31,13 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import org.apache.commons.io.IOUtils;
 
-import elemental.json.Json;
 import elemental.json.JsonObject;
 import fr.chatelain.reservation.reservation.back.entities.Chambre;
 import fr.chatelain.reservation.reservation.back.entities.Photos;
@@ -45,16 +47,18 @@ import fr.chatelain.reservation.reservation.back.service.PhotosService;
 import fr.chatelain.reservation.reservation.back.service.ServiceService;
 import fr.chatelain.reservation.reservation.views.MainView;
 
-@Route(value = AjouterChambreFormView.ROUTE, layout = MainView.class)
+@Route(value = ModifierChambreFormView.ROUTE, layout = MainView.class)
 @CssImport("./styles/views/administration/ajouter-chambre-form-view.css")
-@PageTitle("Formulaire d'ajout d'une chambre")
-public class AjouterChambreFormView extends Div {
+@PageTitle("Formulaire de modification d'une chambre")
+public class ModifierChambreFormView extends Div implements HasUrlParameter<String> {
 
     private static final long serialVersionUID = -301749182574686786L;
 
-    public static final String ROUTE = "ajouter_une_chambre";
+    public static final String ROUTE = "modifier_une_chambre";
 
-    public static final String NOM_TAB = "Ajouter une chambre";
+    public static final String NOM_TAB = "Modifier une chambre";
+
+    private Chambre chambreSelected;
 
     private Binder<Chambre> binder = new Binder<>(Chambre.class);
 
@@ -84,10 +88,20 @@ public class AjouterChambreFormView extends Div {
 
     private Set<Service> listAllService = new HashSet<Service>();
 
-    public AjouterChambreFormView(ChambreService chambreService, PhotosService photosService,
-            ServiceService serviceService) {
-        setId("chambre-form-ajout");
+    private ChambreService chambreService;
+    private PhotosService photosService;
+    private ServiceService serviceService;
 
+    public ModifierChambreFormView(ChambreService cs, PhotosService ps, ServiceService ss) {
+
+        chambreService = cs;
+        photosService = ps;
+        serviceService = ss;
+
+        setId("chambre-form-ajout");
+    }
+
+    private void init() {
         listAllService = serviceService.findAll();
 
         add(createUploadFile());
@@ -95,9 +109,7 @@ public class AjouterChambreFormView extends Div {
         add(createListService());
         add(createButtonLayout());
 
-        clearForm();
-
-        annuler.addClickListener(e -> clearForm());
+        annuler.addClickListener(e -> redirectLister());
         enregistrer.addClickListener(e -> {
             if (binder.isValid()) {
                 listPhotos.forEach(p -> {
@@ -107,7 +119,7 @@ public class AjouterChambreFormView extends Div {
                 binder.getBean().setServices(listServiceSelected);
                 chambreService.save(binder.getBean());
                 Notification.show("Chambre ajoutée.");
-                clearForm();
+                redirectLister();
             } else {
                 Notification.show("Erreur de saisie");
                 binder.validate();
@@ -115,13 +127,8 @@ public class AjouterChambreFormView extends Div {
         });
     }
 
-    private void clearForm() {
-        binder.setBean(new Chambre());
-        listBoxService.deselectAll();
-        listServiceSelected = new HashSet<Service>(0);
-        // buffer = new MultiFileMemoryBuffer();
-        upload.getElement().setPropertyJson("files", Json.createArray());
-        listPhotos = new HashSet<Photos>(0);
+    private void redirectLister() {
+        UI.getCurrent().getPage().setLocation(ListerChambreView.ROUTE);
     }
 
     private Component createFormInscription() {
@@ -228,6 +235,21 @@ public class AjouterChambreFormView extends Div {
         buttonLayout.add(enregistrer);
         buttonLayout.add(annuler);
         return buttonLayout;
+    }
+
+    @Override
+    public void setParameter(BeforeEvent event, String parameter) {
+        event.getLocation().getSubLocation().ifPresent(location -> {
+            String idChambre = location.getSegments().get(0);
+            Optional<Chambre> optionalChambre = chambreService.findById(idChambre);
+            if (optionalChambre.isPresent()) {
+                chambreSelected = optionalChambre.get();
+                binder.setBean(chambreSelected);
+            } else {
+                redirectLister();
+            }
+            init();
+        });
     }
 
 }

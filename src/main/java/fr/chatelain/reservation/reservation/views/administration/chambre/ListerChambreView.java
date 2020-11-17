@@ -7,6 +7,9 @@ import java.util.Set;
 import com.flowingcode.vaadin.addons.carousel.Carousel;
 import com.flowingcode.vaadin.addons.carousel.Slide;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -35,6 +38,10 @@ public class ListerChambreView extends Div {
     public static final String NOM_TAB = "Liste des chambre";
 
     private List<Chambre> listeChambres = new ArrayList<Chambre>(0);
+
+    private Button modifier = new Button("Modifier");
+
+    private Button supprimer = new Button("Supprimer");
 
     private Component detailsChambre = null;
 
@@ -118,6 +125,13 @@ public class ListerChambreView extends Div {
         horizontalLayout.add(divRight);
 
         verticalLayout.add(horizontalLayout);
+        modifier.addClickListener(event -> {
+            String uri = String.format("%s/%s", ModifierChambreFormView.ROUTE, chambre.getId());
+            UI.getCurrent().getPage().setLocation(uri);
+        });
+
+        verticalLayout.add(createButtonLayout());
+
         return verticalLayout;
     }
 
@@ -137,4 +151,15 @@ public class ListerChambreView extends Div {
         carousel.setHeight("400px");
         return carousel;
     }
+
+    private Component createButtonLayout() {
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.addClassName("button-layout");
+        modifier.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        supprimer.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonLayout.add(modifier);
+        buttonLayout.add(supprimer);
+        return buttonLayout;
+    }
+
 }

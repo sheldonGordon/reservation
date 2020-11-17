@@ -1,6 +1,7 @@
 package fr.chatelain.reservation.reservation.back.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,9 @@ public class ChambreService {
     public List<Chambre> findAll() {
         Iterable<Chambre> it = chambreRepository.findAll();
         return IteratorUtils.toList(it.iterator());
+    }
+
+    public Optional<Chambre> findById(String idChambre) {
+        return chambreRepository.findById(idChambre);
     }
 }
